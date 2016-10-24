@@ -63,6 +63,16 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.9.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -130,5 +140,13 @@
             <url>https://philanthropist.touk.pl/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:TouK/dockds.git</connection>
+        <developerConnection>scm:git:git@github.com:TouK/dockds.git</developerConnection>
+        <url>https://github.com/TouK/dockds</url>
+        <tag>HEAD</tag>
+    </scm>
+
 
 </project>
