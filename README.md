@@ -2,7 +2,7 @@
 
 ## Usage
 
-Assuming you have either PostgreSQL or MySQL driver in your depedencies list, just add the the following dependency:
+Assuming you have either PostgreSQL or MySQL driver in your depedencies list, just add yet the following dependency:
 ```xml
 <dependency>
   <groupId>pl.touk</groupId>
@@ -12,6 +12,15 @@ Assuming you have either PostgreSQL or MySQL driver in your depedencies list, ju
   <!-- <scope>test</scope> -->
 </dependency>
 ```
+and the following repository:
+```xml
+<repository>
+  <id>touk public releases</id>
+  <name>touk public releases</name>
+  <url>https://philanthropist.touk.pl/nexus/content/repositories/releases/</url>
+</repository>
+```
+
 Unless you have a datasource url specifified in `application.properties` 
 a database instance in a Docker container will be launched along with your applicaton context.
 
