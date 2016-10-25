@@ -5,21 +5,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { DockerizedDataSourceTest.TestConfiguration.class})
-@TestPropertySource(properties = {
-        "spring.jpa.properties.hibernate.hbm2ddl.auto:create"
-})
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {
+        SampleConfiguration.class},
+        properties = {
+                "spring.jpa.properties.hibernate.hbm2ddl.auto:create"
+        })
 public class DockerizedDataSourceTest {
 
     @Resource
@@ -46,11 +49,4 @@ public class DockerizedDataSourceTest {
         Assertions.assertThat(sampleRepository.findOne(1L).getValue()).isEqualTo(sampleEntity.getValue());
     }
 
-    @org.springframework.context.annotation.Configuration
-    @EnableJpaRepositories
-    @EnableAutoConfiguration
-    @Import(DockerizedDataSourceAutoConfiguration.class)
-    public static class TestConfiguration {
-
-    }
 }
