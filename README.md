@@ -1,4 +1,5 @@
 # dockds
+[![Build Status](https://travis-ci.org/TouK/dockds.svg?branch=master)](https://travis-ci.org/TouK/dockds)
 
 ## Usage
 
@@ -25,3 +26,5 @@ Unless you have a datasource url specifified in `application.properties`
 a database instance in a Docker container will be launched along with your applicaton context.
 
 Just as if you had an embedded database (e.g. HSQLDB) driver in your `pom.xml`.
+
+If you have tests using an embedded database with `@DataJpaAnnotation`, you substitute it with `@DockerizedDataJpaTest`. This way you will be able to use native queries in your JPA repositories.
