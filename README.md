@@ -8,7 +8,7 @@ Assuming you have either PostgreSQL or MySQL driver in your depedencies list, ju
 <dependency>
   <groupId>pl.touk</groupId>
   <artifactId>dockds</artifactId>
-  <version>1.0.0-RC1</version>
+  <version>1.0.0-RC2</version>
   <!-- Probably in most cases you will want -->
   <!-- <scope>test</scope> -->
 </dependency>
@@ -27,4 +27,4 @@ a database instance in a Docker container will be launched along with your appli
 
 Just as if you had an embedded database (e.g. HSQLDB) driver in your `pom.xml`.
 
-If you have tests using an embedded database with `@DataJpaAnnotation`, you substitute it with `@DockerizedDataJpaTest`. This way you will be able to use native queries in your JPA repositories.
+If you have tests using an embedded database with `@DataJpaTest` annotation, you substitute it with `@DockerizedDataJpaTest`. This way you will be able to use native queries in your JPA repositories.
