@@ -1,6 +1,9 @@
 # dockds
 [![Build Status](https://travis-ci.org/TouK/dockds.svg?branch=master)](https://travis-ci.org/TouK/dockds)
 
+With a little help of Docker embed PostgreSQL or MySQL in your Spring Boot application or test
+just as you can do with H2 or HSQLDB.
+
 ## Usage
 
 Assuming you have either PostgreSQL or MySQL driver in your depedencies list, just add yet the following dependency:
