@@ -28,3 +28,9 @@ a database instance in a Docker container will be launched along with your appli
 Just as if you had an embedded database (e.g. HSQLDB) driver in your `pom.xml`.
 
 If you have tests using an embedded database with `@DataJpaTest` annotation, you substitute it with `@DockerizedDataJpaTest`. This way you will be able to use native queries in your JPA repositories.
+
+## Getting Started
+1. Complete guide [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+2. Add the above repository and dependency to `pom.xml` or `build.gradle`
+3. Replace H2 with PostgreSQL or MySQL in the `pom.xml` or `build.gradle`
+4. Replace `@DataJpaTest` with `@DockerizedDataJpaTest` in `CustomerRepositoryTests` (which is not described in the guide but is available in the provided source repository)
