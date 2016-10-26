@@ -7,4 +7,4 @@ services:
 before_install:
   - docker pull postgres:latest
   - docker pull mysql:latest
-script: mvn clean verify
+script: mvn clean verify -Dgpg.skip
