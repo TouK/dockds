@@ -4,7 +4,7 @@
 
     <groupId>pl.touk</groupId>
     <artifactId>dockds</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-RC3</version>
 
     <name>dockds</name>
     <description>Docker contained database autoconfiguration for Spring Boot</description>
@@ -170,7 +170,7 @@
         <connection>scm:git:git@github.com:TouK/dockds.git</connection>
         <developerConnection>scm:git:git@github.com:TouK/dockds.git</developerConnection>
         <url>https://github.com/TouK/dockds</url>
-        <tag>HEAD</tag>
+        <tag>dockds-1.0.0-RC3</tag>
     </scm>
 
 
