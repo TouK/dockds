@@ -7,4 +7,4 @@ services:
 before_install:
   - docker pull postgres:latest
   - docker pull mysql:latest
-script: mvn clean verify -Dgpg.skip=true
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dgpg.skip=true -B -V
