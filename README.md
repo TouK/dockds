@@ -11,18 +11,10 @@ Assuming you have either PostgreSQL or MySQL driver in your depedencies list, ju
 <dependency>
   <groupId>pl.touk</groupId>
   <artifactId>dockds</artifactId>
-  <version>1.0.0-RC2</version>
+  <version>1.0.0-RC3</version>
   <!-- Probably in most cases you will want -->
   <!-- <scope>test</scope> -->
 </dependency>
-```
-and the following repository:
-```xml
-<repository>
-  <id>touk public releases</id>
-  <name>touk public releases</name>
-  <url>https://philanthropist.touk.pl/nexus/content/repositories/releases/</url>
-</repository>
 ```
 
 Unless you have a datasource url specifified in `application.properties` 
@@ -34,6 +26,6 @@ If you have tests using an embedded database with `@DataJpaTest` annotation, you
 
 ## Getting Started
 1. Complete guide [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
-2. Add the above repository and dependency to `pom.xml` or `build.gradle`
+2. Add the above dependency to `pom.xml` or `build.gradle`
 3. Replace H2 with PostgreSQL or MySQL in the `pom.xml` or `build.gradle`
 4. Replace `@DataJpaTest` with `@DockerizedDataJpaTest` in `CustomerRepositoryTests` (which is not described in the guide but is available in the provided source repository)

@@ -6,6 +6,19 @@
     <artifactId>dockds</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <name>dockds</name>
+    <description>Docker contained database autoconfiguration for Spring Boot</description>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>TouK</name>
+        <url>https://touk.pl</url>
+    </organization>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -71,6 +84,20 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -130,12 +157,12 @@
 
     <distributionManagement>
         <repository>
-            <id>touk.philanthropist.releases</id>
-            <url>https://philanthropist.touk.pl/nexus/content/repositories/releases</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>touk.philanthropist.snapshots</id>
-            <url>https://philanthropist.touk.pl/nexus/content/repositories/snapshots</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
