@@ -11,7 +11,7 @@ Assuming you have either PostgreSQL or MySQL driver in your depedencies list, ju
 <dependency>
   <groupId>pl.touk</groupId>
   <artifactId>dockds</artifactId>
-  <version>1.0.0-RC3</version>
+  <version>1.1.0</version>
   <!-- Probably in most cases you will want -->
   <!-- <scope>test</scope> -->
 </dependency>
