@@ -3,14 +3,9 @@ package pl.touk.dockds;
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerException;
-import com.spotify.docker.client.messages.ContainerConfig;
-import com.spotify.docker.client.messages.ContainerCreation;
-import com.spotify.docker.client.messages.ContainerInfo;
-import com.spotify.docker.client.messages.HostConfig;
-import com.spotify.docker.client.messages.NetworkSettings;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import com.spotify.docker.client.messages.*;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.datasource.DelegatingDataSource;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -21,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class DockerizedDataSource extends DelegatingDataSource {
 
@@ -75,9 +69,10 @@ public class DockerizedDataSource extends DelegatingDataSource {
                 .flatMap(c -> c.names().stream())
                 .filter(name -> name.startsWith("/" + CONTAINER_NAME_PREFIX))
                 .peek(log::debug)
-                .collect(Collectors.counting());
-        ;
-        log.warn("Found {} probably stale containers. Consider removing them.", staleContainersCount);
+                .count();
+        if (staleContainersCount > 0) {
+            log.warn("Found {} probably stale containers. Consider removing them.", staleContainersCount);
+        }
     }
 
     protected void createContainer() throws DockerException, InterruptedException, IOException {
@@ -88,9 +83,7 @@ public class DockerizedDataSource extends DelegatingDataSource {
 
         ContainerConfig containerConfig = ContainerConfig.builder().env(type.getEnv()).image(type.getImage()).hostConfig(hostConfig).build();
         ContainerCreation containerCreation = docker.createContainer(containerConfig, CONTAINER_NAME_PREFIX + UUID.randomUUID());
-        if (!CollectionUtils.isEmpty(containerCreation.getWarnings())) {
-            containerCreation.getWarnings().forEach(DockerizedDataSource.log::warn);
-        }
+        Optional.ofNullable(containerCreation.warnings()).ifPresent(it -> it.forEach(DockerizedDataSource.log::warn));
 
         docker.startContainer(containerCreation.id());
         this.containerInfo = docker.inspectContainer(containerCreation.id());

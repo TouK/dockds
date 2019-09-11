@@ -1,7 +1,9 @@
 package pl.touk.dockds;
 
 import org.springframework.beans.factory.BeanClassLoaderAware;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
@@ -10,13 +12,14 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 
 @Configuration
+@AutoConfigureBefore(DataSourceAutoConfiguration.class)
 public class DockerizedDataSourceAutoConfiguration implements BeanClassLoaderAware {
 
     private ClassLoader classLoader;
 
     @Bean
     @ConditionalOnProperty(prefix = "spring.datasource", name = "url", havingValue = "false", matchIfMissing = true)
-    public DataSource dataSource() throws Exception {
+    public DataSource dockerizeDdataSource() throws Exception {
         DockerizedDatabase databaseConnection = Arrays.stream(DockerizedDatabase.values())
                 .filter(ddc -> ClassUtils.isPresent(ddc.getDriverClass(), classLoader))
                 .findFirst()

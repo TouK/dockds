@@ -40,7 +40,7 @@ public class DockerizedDataSourceTest {
         //when
         sampleRepository.save(sampleEntity);
         //then
-        Assertions.assertThat(sampleRepository.findOne(1L).getValue()).isEqualTo(sampleEntity.getValue());
+        Assertions.assertThat(sampleRepository.findById(1L).map(SampleEntity::getValue).get()).isEqualTo(sampleEntity.getValue());
     }
 
 }
