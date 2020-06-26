@@ -9,19 +9,23 @@ import org.springframework.jdbc.datasource.DelegatingDataSource;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.sql.DataSource;
+import java.io.Closeable;
 import java.io.IOException;
+import java.net.URI;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class DockerizedDataSource extends DelegatingDataSource {
+public class DockerizedDataSource extends DelegatingDataSource implements Closeable {
 
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DockerizedDataSource.class);
 
     public static final String CONTAINER_NAME_PREFIX = "dockds-";
+    private static final int STARTUP_CHECK_INTERVAL = 5000;
+    private static final int STARTUP_CHECK_ATTEMPTS = 30;
 
     protected final DockerizedDatabase type;
 
@@ -50,7 +54,7 @@ public class DockerizedDataSource extends DelegatingDataSource {
                 DataSourceBuilder.create()
                         .username(type.getUsername())
                         .password(type.getPassword())
-                        .url(getDatabaseUrl())
+                        .url(getDatabaseUrl().toString())
                         .build()
         );
 
@@ -58,8 +62,11 @@ public class DockerizedDataSource extends DelegatingDataSource {
 
     @PreDestroy
     public void destroyContainer() throws Exception {
+        log.info("Removing the database container");
+        close();
         docker.stopContainer(containerInfo.id(), 30);
         docker.removeContainer(containerInfo.id(), DockerClient.RemoveContainerParam.removeVolumes());
+        log.info("The database container has been successfully removed");
     }
 
     protected void checkStaleContainers() throws DockerException, InterruptedException {
@@ -89,29 +96,40 @@ public class DockerizedDataSource extends DelegatingDataSource {
         this.containerInfo = docker.inspectContainer(containerCreation.id());
     }
 
-    protected void waitForDatabaseStart(String url, String username, String password) throws InterruptedException, SQLException {
-        for (int i = 0; i < 10; i++) {
+    protected void waitForDatabaseStart(URI url, String username, String password) throws InterruptedException, SQLException {
+        for (int i = 0; i < STARTUP_CHECK_ATTEMPTS; i++) {
+            log.info("Waiting for the container to start up on {} ...", url                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             );
             try {
-                if (DriverManager.getConnection(url, username, password).isValid(10)) {
+                if (DriverManager.getConnection(url.toString(), username, password).isValid(10)) {
                     log.info("Database container seems to have started");
                     return;
                 }
             } catch (SQLException e) {
-                Thread.sleep(3000);
+                Thread.sleep(STARTUP_CHECK_INTERVAL);
             }
-            log.info("Waiting for the container to start up...");
         }
         log.error("Database container has probably not started");
 
     }
 
-    public String getDatabaseUrl() {
+    @Override
+    public void close() throws IOException {
+        DataSource targetDataSource = getTargetDataSource();
+        if (targetDataSource instanceof Closeable) {
+            ((Closeable) targetDataSource).close();
+        }
+    }
+
+    public URI getDatabaseUrl() {
         return Optional.ofNullable(containerInfo)
                 .map(ContainerInfo::networkSettings)
-                .map(NetworkSettings::ports)
-                .flatMap(ports -> ports.entrySet().stream().map(Map.Entry::getValue).flatMap(List::stream).findFirst())
-                .map(a -> type.getUrl().expand(a.hostIp(), a.hostPort()).toUriString())
+                .flatMap(this::firstExposedPort)
+                .map(port -> type.getUrl(docker.getHost(), port))
                 .get();
+    }
+
+    private Optional<String> firstExposedPort(NetworkSettings networkSettings) {
+        return networkSettings.ports().values().stream().flatMap(List::stream).findFirst().map(PortBinding::hostPort);
     }
 
 }

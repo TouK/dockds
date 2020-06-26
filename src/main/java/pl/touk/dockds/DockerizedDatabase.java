@@ -3,9 +3,11 @@ package pl.touk.dockds;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+
 public enum DockerizedDatabase {
 
-    POSTGRES("org.postgresql.Driver", "postgres:latest", UriComponentsBuilder.fromUriString("jdbc:postgresql://{host}:{port}/").build(), "postgres", null),
+    POSTGRES("org.postgresql.Driver", "postgres:latest", UriComponentsBuilder.fromUriString("jdbc:postgresql://{host}:{port}/").build(), "postgres", null, "POSTGRES_HOST_AUTH_METHOD=trust"),
     MYSQL("com.mysql.jdbc.Driver", "mysql:latest", UriComponentsBuilder.fromUriString("jdbc:mysql://{host}:{port}/dockds?useSSL=false").build(), "root", null, "MYSQL_ALLOW_EMPTY_PASSWORD=yes", "MYSQL_DATABASE=dockds");
 
     protected final String driverClass;
@@ -39,6 +41,10 @@ public enum DockerizedDatabase {
 
     public UriComponents getUrl() {
         return url;
+    }
+
+    public URI getUrl(String host, String port) {
+        return url.expand(host, port).toUri();
     }
 
     public String getUsername() {

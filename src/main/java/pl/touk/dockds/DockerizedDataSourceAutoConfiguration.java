@@ -19,7 +19,7 @@ public class DockerizedDataSourceAutoConfiguration implements BeanClassLoaderAwa
 
     @Bean
     @ConditionalOnProperty(prefix = "spring.datasource", name = "url", havingValue = "false", matchIfMissing = true)
-    public DataSource dockerizeDdataSource() throws Exception {
+    public DataSource dockerizeDataSource() throws Exception {
         DockerizedDatabase databaseConnection = Arrays.stream(DockerizedDatabase.values())
                 .filter(ddc -> ClassUtils.isPresent(ddc.getDriverClass(), classLoader))
                 .findFirst()

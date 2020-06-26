@@ -15,7 +15,9 @@ import java.sql.SQLException;
 @SpringBootTest(classes = {
         SampleConfiguration.class},
         properties = {
-                "spring.jpa.properties.hibernate.hbm2ddl.auto:create"
+                "spring.jpa.properties.hibernate.hbm2ddl.auto=create",
+                "spring.datasource.schema=classpath:sample.ddl",
+                "spring.datasource.initialization-mode=always"
         })
 public class DockerizedDataSourceTest {
 
